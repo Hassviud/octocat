@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الأرباح الذكية</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--dark);
+            color: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropbtn {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            right: 0;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: right;
+        }
+
+        .dropdown-content a:hover { background-color: #f1f1f1; }
+        .show { display: block; }
+
+        /* Main Content */
+        .container { padding: 2rem 5%; text-align: center; }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            margin-top: 20px;
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">لوحة التحكم</div>
+    <div class="dropdown">
+        <button onclick="toggleMenu()" class="dropbtn">القائمة المالية ▾</button>
+        <div id="myDropdown" class="dropdown-content">
+            <a href="#" onclick="showSection('earnings')">الأرباح</a>
+            <a href="#" onclick="showSection('withdraw')">السحب</a>
+            <a href="#" onclick="showSection('referral')">الإحالة</a>
+            <a href="#" onclick="showSection('offers')">جدران العروض</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div id="welcome" class="card">
+        <h2>مرحباً بك في منصتك</h2>
+        <p>اختر من القائمة أعلاه لبدء العمل.</p>
+    </div>
+
+    <div id="earnings" class="card hidden">
+        <h2>رصيدك الحالي</h2>
+        <h3 id="balance">$0.00</h3>
+        <button onclick="addEarning()">تحديث الرصيد</button>
+    </div>
+
+    <div id="withdraw" class="card hidden">
+        <h2>طلب سحب</h2>
+        <input type="number" placeholder="المبلغ">
+        <button>سحب الآن</button>
+    </div>
+
+    <div id="referral" class="card hidden">
+        <h2>رابط الإحالة الخاص بك</h2>
+        <code>https://mysite.com/ref/user123</code>
+    </div>
+
+    <div id="offers" class="card hidden">
+        <h2>جدران العروض (Offerwalls)</h2>
+        <p>قم بإكمال المهام لربح النقاط.</p>
+    </div>
+</div>
+
+<script>
+    function toggleMenu() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            for (var i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+
+    function showSection(id) {
+        document.querySelectorAll('.card').forEach(card => card.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    function addEarning() {
+        // نداء بسيط للـ API الخاص ببايثون
+        fetch('/api/balance')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('balance').innerText = "$" + data.balance;
+            });
+    }
+</script>
+
+</body>
+</html>
